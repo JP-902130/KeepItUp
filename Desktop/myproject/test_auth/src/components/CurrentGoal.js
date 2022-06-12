@@ -44,12 +44,6 @@ function CurrentGoal() {
 
   return (
     <>
-      {/* <input
-        type="button"
-        onClick={() => {
-          setTest("dd");
-        }}
-      /> */}
       <div>{goals.length != 0 ? goals[0][0]["goalLog"] : "none"}</div>
     </>
   );
