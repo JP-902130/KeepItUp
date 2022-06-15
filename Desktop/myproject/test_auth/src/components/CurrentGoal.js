@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from "react";
 import firebase from "firebase/compat/app";
 import { useAuth } from "../contexts/AuthContext";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-} from "firebase/firestore";
-
+import { Card } from "react-bootstrap";
+import { render } from "@testing-library/react";
+import { v4 as uuidv4 } from "uuid";
 function CurrentGoal() {
   const { currentUser } = useAuth();
   var db = firebase.firestore();
-  const [test, setTest] = useState("");
   const [goals, setGoals] = useState([]);
-
+  const [indents, setIndents] = useState([]);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -38,15 +30,42 @@ function CurrentGoal() {
         console.log(e);
       }
     };
-    console.log("fefer");
     fetchUserData();
   }, []);
+  useEffect(() => {
+    render();
+  }, [goals]);
 
-  return (
-    <>
-      <div>{goals.length != 0 ? goals[0][0]["goalLog"] : "none"}</div>
-    </>
-  );
+  const render = () => {
+    var list_of_html = [];
+    var arr = goals[0] || [];
+    for (let i = 0; i < arr.length; i++) {
+      list_of_html.push(
+        <div key={uuidv4()}>
+          <Card.Body>
+            <h2 className="text-center mb-4">
+              {goals.length != 0 ? goals[0][i]["goalName"] : "Loading..."}
+            </h2>
+            <strong>Alert Setup: </strong>
+            {goals.length != 0 ? goals[0][i]["goalAlert"] : "Loading..."}
+            <br></br>
+            <strong>Goal Log: </strong>
+            {goals.length != 0 ? goals[0][i]["goalLog"] : "Loading..."}
+            <br></br>
+            <strong>Goal Period: </strong>
+            <div>
+              You plan to do this task once every{" "}
+              {goals.length != 0 ? goals[0][i]["goalPeriod"] : "Loading..."}
+            </div>
+            <br></br>
+          </Card.Body>
+        </div>
+      );
+    }
+    setIndents(list_of_html);
+  };
+
+  return <div>{indents}</div>;
 }
 
 export default CurrentGoal;
