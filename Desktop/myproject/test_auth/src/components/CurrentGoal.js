@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { Card } from "react-bootstrap";
 import { render } from "@testing-library/react";
 import { v4 as uuidv4 } from "uuid";
+import { Link } from "react-router-dom";
 function CurrentGoal() {
   const { currentUser } = useAuth();
   var db = firebase.firestore();
@@ -62,6 +63,11 @@ function CurrentGoal() {
         </div>
       );
     }
+    list_of_html.push(
+      <div key={uuidv4()} className="w-100 text-center mt-2">
+        <Link to="/">Cancel</Link>
+      </div>
+    );
     setIndents(list_of_html);
   };
 
