@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import firebase from "firebase/compat/app";
 import { useAuth } from "../contexts/AuthContext";
 import { Card } from "react-bootstrap";
-import { render } from "@testing-library/react";
 import { v4 as uuidv4 } from "uuid";
 import { Link } from "react-router-dom";
 function CurrentGoal() {
