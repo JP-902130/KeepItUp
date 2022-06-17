@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import firebase from "firebase/compat/app";
 import { useAuth } from "../contexts/AuthContext";
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 import { Link } from "react-router-dom";
 function CurrentGoal() {
@@ -21,10 +21,8 @@ function CurrentGoal() {
           .get()
           .then((snap) => {
             const docSnapshots = snap.docs;
-            for (var i in docSnapshots) {
-              const doc = docSnapshots[i].data();
-              setGoals([doc["goals"]]);
-            }
+            const doc = docSnapshots[0].data();
+            setGoals([doc["goals"]]);
           });
       } catch (e) {
         console.log(e);
@@ -35,14 +33,31 @@ function CurrentGoal() {
   useEffect(() => {
     render();
   }, [goals]);
+  const RemoveGoal = async (e) => {
+    let goal_id = e.target.parentNode.parentNode.id;
+    let new_arr = [];
+    await db
+      .collection("users")
+      .where(firebase.firestore.FieldPath.documentId(), "==", currentUser.uid)
+      .get()
+      .then((snap) => {
+        const docSnapshots = snap.docs;
+        const doc = docSnapshots[0].data();
+        new_arr = doc["goals"];
+      });
+    new_arr = new_arr.filter((goal) => goal["goalID"] != goal_id);
+    db.collection("users").doc(currentUser.uid).update({
+      goals: new_arr,
+    });
+  };
 
   const render = () => {
     var list_of_html = [];
     var arr = goals[0] || [];
     for (let i = 0; i < arr.length; i++) {
       list_of_html.push(
-        <div key={uuidv4()}>
-          <Card.Body>
+        <div key={goals[0][i]["goalID"]} id={goals[0][i]["goalID"]}>
+          <Card.Body style={{ border: "2px solid black", margin: "2px" }}>
             <h2 className="text-center mb-4">
               {goals.length != 0 ? goals[0][i]["goalName"] : "Loading..."}
             </h2>
@@ -58,6 +73,9 @@ function CurrentGoal() {
               {goals.length != 0 ? goals[0][i]["goalPeriod"] : "Loading..."}
             </div>
             <br></br>
+            <Button onClick={RemoveGoal} variant="danger">
+              Delete
+            </Button>
           </Card.Body>
         </div>
       );
@@ -70,7 +88,11 @@ function CurrentGoal() {
     setIndents(list_of_html);
   };
 
-  return <div>{indents}</div>;
+  return (
+    <div>
+      <Card>{indents}</Card>
+    </div>
+  );
 }
 
 export default CurrentGoal;

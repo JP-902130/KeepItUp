@@ -4,15 +4,14 @@ import { useNavigate, Link } from "react-router-dom";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import firebase from "firebase/compat/app";
 import { Card, Button, Form, Alert } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
 
 function NewGoal() {
   const { currentUser } = useAuth();
-  const [error, setError] = useState("");
   const goalNameRef = useRef();
   const goalPeriodRef = useRef();
   const goalLogRef = useRef();
   const goalAlertRef = useRef();
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   var db = firebase.firestore();
 
@@ -25,6 +24,7 @@ function NewGoal() {
         goalPeriod: goalPeriodRef.current.value,
         goalLog: goalLogRef.current.value,
         goalAlert: goalAlertRef.current.value,
+        goalID: uuidv4(),
       }),
     });
     navigate("/");
@@ -38,7 +38,6 @@ function NewGoal() {
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Setup a new goal</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group id="goalName">
               <Form.Label>Goal Name</Form.Label>
@@ -77,7 +76,7 @@ function NewGoal() {
               </Form.Control>
             </Form.Group>
             <br />
-            <Button disabled={loading} className="w-100" type="submit">
+            <Button className="w-100" type="submit">
               Submit your goal
             </Button>
           </Form>
