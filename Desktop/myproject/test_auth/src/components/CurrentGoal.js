@@ -21,8 +21,10 @@ function CurrentGoal() {
           .get()
           .then((snap) => {
             const docSnapshots = snap.docs;
-            const doc = docSnapshots[0].data();
-            setGoals([doc["goals"]]);
+            for (var i in docSnapshots) {
+              const doc = docSnapshots[i].data();
+              setGoals([doc["goals"]]);
+            }
           });
       } catch (e) {
         console.log(e);
@@ -33,6 +35,22 @@ function CurrentGoal() {
   useEffect(() => {
     render();
   }, [goals]);
+  const fetchUserData = async () => {
+    try {
+      db.collection("users")
+        .where(firebase.firestore.FieldPath.documentId(), "==", currentUser.uid)
+        .get()
+        .then((snap) => {
+          const docSnapshots = snap.docs;
+          for (var i in docSnapshots) {
+            const doc = docSnapshots[i].data();
+            setGoals([doc["goals"]]);
+          }
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const RemoveGoal = async (e) => {
     let goal_id = e.target.parentNode.parentNode.id;
     let new_arr = [];
@@ -45,10 +63,11 @@ function CurrentGoal() {
         const doc = docSnapshots[0].data();
         new_arr = doc["goals"];
       });
-    new_arr = new_arr.filter((goal) => goal["goalID"] != goal_id);
-    db.collection("users").doc(currentUser.uid).update({
+    new_arr = new_arr.filter((goal) => goal["goalID"] !== goal_id);
+    await db.collection("users").doc(currentUser.uid).update({
       goals: new_arr,
     });
+    fetchUserData();
   };
 
   const render = () => {
@@ -59,18 +78,18 @@ function CurrentGoal() {
         <div key={goals[0][i]["goalID"]} id={goals[0][i]["goalID"]}>
           <Card.Body style={{ border: "2px solid black", margin: "2px" }}>
             <h2 className="text-center mb-4">
-              {goals.length != 0 ? goals[0][i]["goalName"] : "Loading..."}
+              {goals.length !== 0 ? goals[0][i]["goalName"] : "Loading..."}
             </h2>
             <strong>Alert Setup: </strong>
-            {goals.length != 0 ? goals[0][i]["goalAlert"] : "Loading..."}
+            {goals.length !== 0 ? goals[0][i]["goalAlert"] : "Loading..."}
             <br></br>
             <strong>Goal Log: </strong>
-            {goals.length != 0 ? goals[0][i]["goalLog"] : "Loading..."}
+            {goals.length !== 0 ? goals[0][i]["goalLog"] : "Loading..."}
             <br></br>
             <strong>Goal Period: </strong>
             <div>
               You plan to do this task once every{" "}
-              {goals.length != 0 ? goals[0][i]["goalPeriod"] : "Loading..."}
+              {goals.length !== 0 ? goals[0][i]["goalPeriod"] : "Loading..."}
             </div>
             <br></br>
             <Button onClick={RemoveGoal} variant="danger">
