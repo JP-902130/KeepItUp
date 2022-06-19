@@ -9,6 +9,7 @@ function CurrentGoal() {
   var db = firebase.firestore();
   const [goals, setGoals] = useState([]);
   const [indents, setIndents] = useState([]);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -35,6 +36,7 @@ function CurrentGoal() {
   useEffect(() => {
     render();
   }, [goals]);
+
   const fetchUserData = async () => {
     try {
       db.collection("users")
