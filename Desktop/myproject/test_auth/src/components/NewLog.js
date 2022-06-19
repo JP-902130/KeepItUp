@@ -1,33 +1,33 @@
 import React, { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
 import firebase from "firebase/compat/app";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 
-function NewGoal() {
+function NewLog() {
   const { currentUser } = useAuth();
   const logNameRef = useRef();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   var db = firebase.firestore();
-  const createGoal = async function (goalID) {
-    const goalRef = doc(db, "users", goalID);
+
+  const createLog = async function (goalID, newlog) {
+    const goalRef = doc(db, "goals", goalID);
     await updateDoc(goalRef, {
-      goals: arrayUnion({
-        goalLogs: [],
-      }),
+      goalLogs: firebase.firestore.FieldValue.arrayUnion(newlog),
     });
-    navigate("/");
+    navigate("/current-goal");
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    createGoal(currentUser.uid);
+    createLog(searchParams.get("goalID"), logNameRef.current.value);
   };
   return (
     <>
       <Card>
         <Card.Body>
-          <h2 className="text-center mb-4">Setup a new goal</h2>
+          <h2 className="text-center mb-4">Add a new log</h2>
           <Form onSubmit={handleSubmit}>
             <Form.Group id="logName">
               <Form.Label>Log Name</Form.Label>
@@ -47,4 +47,4 @@ function NewGoal() {
   );
 }
 
-export default NewGoal;
+export default NewLog;

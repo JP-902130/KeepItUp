@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
 import firebase from "firebase/compat/app";
 import { Card, Button, Form, Alert } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
@@ -17,6 +17,7 @@ function NewGoal() {
 
   const createGoal = async function (userID) {
     const userRef = doc(db, "users", userID);
+    const goalID = uuidv4();
     await updateDoc(userRef, {
       goals: arrayUnion({
         goalName: goalNameRef.current.value,
@@ -24,8 +25,13 @@ function NewGoal() {
         goalPeriod: goalPeriodRef.current.value,
         goalLog: goalLogRef.current.value,
         goalAlert: goalAlertRef.current.value,
-        goalID: uuidv4(),
+        goalID: goalID,
       }),
+    });
+
+    const goalRef = doc(db, "goals", goalID);
+    await setDoc(goalRef, {
+      goalLogs: [],
     });
     navigate("/");
   };

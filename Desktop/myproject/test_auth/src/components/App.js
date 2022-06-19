@@ -10,6 +10,7 @@ import ForgotPassword from "./ForgotPassword";
 import UpdateProfile from "./UpdateProfile";
 import NewGoal from "./NewGoal";
 import CurrentGoal from "./CurrentGoal";
+import NewLog from "./NewLog";
 
 function App() {
   return (
@@ -50,6 +51,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <CurrentGoal />
+                  </PrivateRoute>
+                }
+              ></Route>
+              <Route
+                path="/new-log"
+                element={
+                  <PrivateRoute>
+                    <NewLog />
                   </PrivateRoute>
                 }
               ></Route>

@@ -3,13 +3,13 @@ import firebase from "firebase/compat/app";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function CurrentGoal() {
   const { currentUser } = useAuth();
   var db = firebase.firestore();
   const [goals, setGoals] = useState([]);
   const [indents, setIndents] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -71,6 +71,9 @@ function CurrentGoal() {
     });
     fetchUserData();
   };
+  const NavigateToNewLog = (e) => {
+    navigate(`/new-log?goalID=${e.target.parentNode.parentNode.id}`);
+  };
 
   const render = () => {
     var list_of_html = [];
@@ -93,6 +96,10 @@ function CurrentGoal() {
               You plan to do this task once every{" "}
               {goals.length !== 0 ? goals[0][i]["goalPeriod"] : "Loading..."}
             </div>
+            <br></br>
+            <Button onClick={NavigateToNewLog} variant="success">
+              Add a new log
+            </Button>
             <br></br>
             <Button onClick={RemoveGoal} variant="danger">
               Delete
