@@ -11,7 +11,7 @@ import UpdateProfile from "./UpdateProfile";
 import NewGoal from "./NewGoal";
 import CurrentGoal from "./CurrentGoal";
 import NewLog from "./NewLog";
-
+import CurrentGoalLog from "./CurrentGoalLog";
 function App() {
   return (
     <Container
@@ -59,6 +59,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <NewLog />
+                  </PrivateRoute>
+                }
+              ></Route>
+              <Route
+                path="/current-goal-log"
+                element={
+                  <PrivateRoute>
+                    <CurrentGoalLog />
                   </PrivateRoute>
                 }
               ></Route>

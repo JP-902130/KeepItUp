@@ -74,6 +74,9 @@ function CurrentGoal() {
   const NavigateToNewLog = (e) => {
     navigate(`/new-log?goalID=${e.target.parentNode.parentNode.id}`);
   };
+  const checkCurrentLog = (e) => {
+    navigate(`/current-goal-log?goalID=${e.target.parentNode.parentNode.id}`);
+  };
 
   const render = () => {
     var list_of_html = [];
@@ -99,6 +102,10 @@ function CurrentGoal() {
             <br></br>
             <Button onClick={NavigateToNewLog} variant="success">
               Add a new log
+            </Button>
+            <br></br>
+            <Button onClick={checkCurrentLog} variant="success">
+              Check your current log
             </Button>
             <br></br>
             <Button onClick={RemoveGoal} variant="danger">

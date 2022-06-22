@@ -8,6 +8,7 @@ import { Card, Button, Form, Alert } from "react-bootstrap";
 function NewLog() {
   const { currentUser } = useAuth();
   const logNameRef = useRef();
+  const logDateRef = useRef();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   var db = firebase.firestore();
@@ -15,13 +16,19 @@ function NewLog() {
   const createLog = async function (goalID, newlog) {
     const goalRef = doc(db, "goals", goalID);
     await updateDoc(goalRef, {
-      goalLogs: firebase.firestore.FieldValue.arrayUnion(newlog),
+      goalLogs: firebase.firestore.FieldValue.arrayUnion({
+        name: newlog.name,
+        date: newlog.date,
+      }),
     });
     navigate("/current-goal");
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    createLog(searchParams.get("goalID"), logNameRef.current.value);
+    createLog(searchParams.get("goalID"), {
+      name: logNameRef.current.value,
+      date: logDateRef.current.value,
+    });
   };
   return (
     <>
@@ -32,6 +39,11 @@ function NewLog() {
             <Form.Group id="logName">
               <Form.Label>Log Name</Form.Label>
               <Form.Control type="text" ref={logNameRef} required />
+            </Form.Group>
+            <br />
+            <Form.Group id="logDate">
+              <Form.Label>Date</Form.Label>
+              <Form.Control type="date" ref={logDateRef} required />
             </Form.Group>
             <br />
             <Button className="w-100" type="submit">
