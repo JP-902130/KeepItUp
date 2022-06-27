@@ -10,6 +10,9 @@ function CurrentGoal() {
   const [goals, setGoals] = useState([]);
   const [indents, setIndents] = useState([]);
   const navigate = useNavigate();
+  const NavigateBackToHomePage = (e) => {
+    navigate(`/`);
+  };
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -69,6 +72,7 @@ function CurrentGoal() {
     await db.collection("users").doc(currentUser.uid).update({
       goals: new_arr,
     });
+    await db.collection("goals").doc(goal_id).delete();
     fetchUserData();
   };
   const NavigateToNewLog = (e) => {
@@ -115,17 +119,14 @@ function CurrentGoal() {
         </div>
       );
     }
-    list_of_html.push(
-      <div key={uuidv4()} className="w-100 text-center mt-2">
-        <Link to="/">Cancel</Link>
-      </div>
-    );
+
     setIndents(list_of_html);
   };
 
   return (
     <div>
       <Card>{indents}</Card>
+      <Button onClick={NavigateBackToHomePage}>Back to homepage</Button>
     </div>
   );
 }

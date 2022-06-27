@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
-import { doc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import firebase from "firebase/compat/app";
-import { Card, Button, Form, Alert } from "react-bootstrap";
+import { Card, Button, Form } from "react-bootstrap";
 
 function NewLog() {
   const { currentUser } = useAuth();

@@ -12,6 +12,7 @@ import NewGoal from "./NewGoal";
 import CurrentGoal from "./CurrentGoal";
 import NewLog from "./NewLog";
 import CurrentGoalLog from "./CurrentGoalLog";
+import GoalBoard from "./GoalBoard";
 function App() {
   return (
     <Container
@@ -72,7 +73,7 @@ function App() {
               ></Route>
               <Route path="/signup" element={<Signup />}></Route>
               <Route path="/login" element={<Login />}></Route>
-
+              <Route path="/goalboard" element={<GoalBoard />}></Route>
               <Route
                 path="/forgot-password"
                 element={<ForgotPassword />}

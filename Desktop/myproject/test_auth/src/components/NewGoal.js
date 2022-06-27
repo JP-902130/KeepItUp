@@ -14,7 +14,9 @@ function NewGoal() {
   const goalAlertRef = useRef();
   const navigate = useNavigate();
   var db = firebase.firestore();
-
+  const NavigateBackToHomePage = (e) => {
+    navigate(`/`);
+  };
   const createGoal = async function (userID) {
     const userRef = doc(db, "users", userID);
     const goalID = uuidv4();
@@ -89,7 +91,7 @@ function NewGoal() {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Link to="/">Cancel</Link>
+        <Button onClick={NavigateBackToHomePage}>Back to dashboard</Button>
       </div>
     </>
   );

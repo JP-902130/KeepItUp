@@ -38,6 +38,9 @@ function UpdateProfile() {
         setLoading(false);
       });
   }
+  const NavigateBackToHomePage = (e) => {
+    navigate(`/`);
+  };
   return (
     <>
       <Card>
@@ -77,7 +80,7 @@ function UpdateProfile() {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Link to="/">Cancel</Link>
+        <Button onClick={NavigateBackToHomePage}>Back to homepage</Button>
       </div>
     </>
   );

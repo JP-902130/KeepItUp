@@ -32,6 +32,9 @@ function Dashboard() {
           <Link to="/current-goal" className="btn btn-primary w-100 mt-3">
             Your Current Goals
           </Link>
+          <Link to="/goalboard" className="btn btn-primary w-100 mt-3">
+            Check other people's goals
+          </Link>
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
